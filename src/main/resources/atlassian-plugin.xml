@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+        <param name="atlassian-data-center-status">compatible</param>
+        <param name="atlassian-data-center-compatible">true</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="jira-custom-hibernate-validator"/>
+    
+    <!-- add our web resources -->
+    <web-resource key="jira-custom-hibernate-validator-resources" name="jira-custom-hibernate-validator Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        
+        <resource type="download" name="jira-custom-hibernate-validator.css" location="/css/jira-custom-hibernate-validator.css"/>
+        <resource type="download" name="jira-custom-hibernate-validator.js" location="/js/jira-custom-hibernate-validator.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>jira-custom-hibernate-validator</context>
+    </web-resource>
+
+    <rest name="Demo Rest Resource" key="jira-custom-hibernate-validator-rest" path="/demo" version="1.0">
+        <description>The Demo Rest Resource Plugin '/demo'</description>
+    </rest>
+
+</atlassian-plugin>
