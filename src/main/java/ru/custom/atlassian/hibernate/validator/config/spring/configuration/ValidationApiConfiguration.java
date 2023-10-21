@@ -20,7 +20,6 @@ public class ValidationApiConfiguration {
     MethodValidationPostProcessor methodValidationPostProcessor(final LocalValidatorFactoryBean localValidatorFactoryBean) {
         MethodValidationPostProcessor methodValidationPostProcessor = new MethodValidationPostProcessor();
         methodValidationPostProcessor.setValidator(localValidatorFactoryBean);
-
         return methodValidationPostProcessor;
     }
 
