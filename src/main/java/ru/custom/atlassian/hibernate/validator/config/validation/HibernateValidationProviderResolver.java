@@ -1,10 +1,11 @@
 package ru.custom.atlassian.hibernate.validator.config.validation;
 
-import java.util.Collections;
-import java.util.List;
+import org.hibernate.validator.HibernateValidator;
+
 import javax.validation.ValidationProviderResolver;
 import javax.validation.spi.ValidationProvider;
-import org.hibernate.validator.HibernateValidator;
+import java.util.Collections;
+import java.util.List;
 
 public class HibernateValidationProviderResolver implements ValidationProviderResolver {
 

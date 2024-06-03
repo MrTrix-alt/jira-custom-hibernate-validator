@@ -17,8 +17,8 @@ import lombok.Setter;
 @XmlRootElement
 public class DemoDto {
 
-    @NotNull(message = "someNumberProp cannot be null")
-    @Min(value = 40, message = "someNumberProp cannot be less than 40")
+    @NotNull
+    @Min(value = 40)
     @XmlElement
     private Integer someNumberProp;
 

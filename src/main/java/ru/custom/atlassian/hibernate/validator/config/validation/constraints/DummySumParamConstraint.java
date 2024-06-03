@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DummySumParamConstraint {
-    String message() default "Params is invalid - check ur multiplication of param";
+    String message() default "dummy.sum.param.message";
 
     Class<?>[] groups() default {};
 

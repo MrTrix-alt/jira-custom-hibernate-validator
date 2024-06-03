@@ -13,9 +13,10 @@
         This is the jira-custom-hibernate-validator spring java configuration plugin for Atlassian JIRA.
     </description>
     <packaging>atlassian-plugin</packaging>
+
     <developers>
         <developer>
-            <name>Timur Abubakirov</name>
+            <name>Timur</name>
         </developer>
     </developers>
 
@@ -23,19 +24,34 @@
         <jira.version>8.20.10</jira.version>
         <amps.version>8.7.0</amps.version>
         <osgi.javaconfig.version>0.6.0</osgi.javaconfig.version>
+        <osgi.core.version>6.0.0</osgi.core.version>
         <atl.osgi-spring-extender>7.1.6</atl.osgi-spring-extender>
-        <spring.version>5.0.10.RELEASE</spring.version>
+        <spring.version>5.3.21</spring.version>
         <jax.ws.rs>2.0.1</jax.ws.rs>
         <lombok.version>1.18.28</lombok.version>
-        <hibernate.validator>6.2.4.Final</hibernate.validator>
+        <hibernate.validator>6.0.22.Final</hibernate.validator>
         <javax.servlet-api>3.0.1</javax.servlet-api>
-        <snakeyaml.version>2.0</snakeyaml.version>
-        <!-- This property ensures consistency between the key in atlassian-plugin.xml and the OSGi bundle's key. -->
+        <postgres.version>42.6.0</postgres.version>
+        <junit.jupiter.version>5.10.0</junit.jupiter.version>
+        <mockito.version>3.11.2</mockito.version>
+
         <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.atlassian.jira</groupId>
+                <artifactId>jira-project</artifactId>
+                <version>${jira.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -48,6 +64,10 @@
                     <groupId>jta</groupId>
                     <artifactId>jta</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>jndi</groupId>
+                    <artifactId>jndi</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -57,9 +77,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.framework</artifactId>
-            <version>4.0.0</version>
+            <groupId>com.atlassian.plugins.rest</groupId>
+            <artifactId>atlassian-rest-module</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -70,13 +89,13 @@
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>osgi.core</artifactId>
-            <version>6.0.0</version>
+            <version>${osgi.core.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.atlassian.plugins</groupId>
-            <artifactId>atlassian-plugins-osgi-spring-extender</artifactId>
-            <version>${atl.osgi-spring-extender}</version>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.framework</artifactId>
+            <version>4.0.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -92,6 +111,28 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>aopalliance</groupId>
+            <artifactId>aopalliance</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>javax.ws.rs</groupId>
             <artifactId>javax.ws.rs-api</artifactId>
             <version>${jax.ws.rs}</version>
@@ -101,6 +142,11 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet-api}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -128,16 +174,35 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>aopalliance</groupId>
-            <artifactId>aopalliance</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.atlassian.sal</groupId>
-            <artifactId>sal-api</artifactId>
-            <version>5.1.1</version>
-            <scope>provided</scope>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Mockito -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.11.2</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -147,46 +212,86 @@
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>jira-maven-plugin</artifactId>
-                <version>${amps.version}</version>
+                <version>8.10.1</version>
                 <extensions>true</extensions>
                 <configuration>
                     <productVersion>${jira.version}</productVersion>
                     <productDataVersion>${jira.version}</productDataVersion>
-                    <enableQuickReload>true</enableQuickReload>
+
+                    <!-- https://bitbucket.org/atlassianlabs/quickreload/src/master/ -->
+                    <enableDevToolbox>false</enableDevToolbox>
+                    <enablePde>false</enablePde>
+                    <skipRestDocGeneration>true</skipRestDocGeneration>
                     <allowGoogleTracking>false</allowGoogleTracking>
+                    <skipManifestValidation>false</skipManifestValidation>
                     <extractDependencies>false</extractDependencies>
 
-                    <!-- See here for an explanation of default instructions: -->
-                    <!-- https://developer.atlassian.com/docs/advanced-topics/configuration-of-instructions-in-atlassian-plugins -->
+                    <compressJs>false</compressJs>
+                    <compressCss>false</compressCss>
+                    <jvmArgs>-Xmx2G</jvmArgs>
+                    <applications>
+                        <application>
+                            <applicationKey>jira-software</applicationKey>
+                            <version>${jira.version}</version>
+                        </application>
+                    </applications>
+                    <products>
+                        <product>
+                            <id>jira</id>
+                            <instanceId>jira</instanceId>
+                            <version>${jira.version}</version>
+                            <dataPath>dev/config/</dataPath>
+                        </product>
+                    </products>
                     <instructions>
-                        <Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>
-
-                        <!-- Add package to export here -->
-
-                        <!-- Add package import here -->
+                        <Atlassian-Plugin-Key>${project.groupId}.${project.artifactId}</Atlassian-Plugin-Key>
+                        <Atlassian-Scan-Folders>META-INF/plugin-descriptors</Atlassian-Scan-Folders>
+                        <Spring-Context>*</Spring-Context>
+                        <Require-Capability>
+                            <![CDATA[osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"]]>
+                        </Require-Capability>
                         <Import-Package>
-                            com.atlassian.plugin.osgi.bridge.external.*;resolution:="optional",
+                            com.atlassian.jira.plugin.webfragment.contextproviders,
+                            com.atlassian.jira.plugin.webfragment.conditions,
+                            com.atlassian.jira.plugin.workflow,
+                            com.atlassian.jira.issue.customfields.searchers,
+                            com.atlassian.jira.jql.operand,
+                            org.springframework.aop,
+                            org.springframework.aop.framework,
+                            org.springframework.core,
+                            org.springframework.cglib,
+                            org.springframework.cglib.proxy,
+                            org.springframework.cglib.core,
+                            org.springframework.cglib.reflect,
                             org.springframework.osgi.*;resolution:="optional",
                             org.eclipse.gemini.blueprint.*;resolution:="optional",
-                            org.springframework.core.*;resolution:="optional",
-                            org.springframework.cglib.core.*;resolution:="optional",
-                            org.springframework.cglib.proxy.*;resolution:="optional",
-                            org.springframework.cglib.reflect.*;resolution:="optional",
-                            org.springframework.aop;resolution:="optional",
-                            org.springframework.aop.framework;resolution:="optional",
                             org.aopalliance.aop;resolution:="optional",
-                            org.aopalliance.aop.*;resolution:="optional",
-                            com.thoughtworks.paranamer.*;resolution:="optional",
-                            javafx.beans.*;resolution:="optional",
-                            javax.*;resolution:="optional",
-                            org.apache.logging.log4j.*;resolution:="optional",
-                            org.jboss.*;resolution:="optional",
-                            org.aspectj.*;resolution:="optional",
-                            *
+                            com.atlassian.jira.*;resolution:="optional",
+                            com.atlassian.event.*;resolution:="optional",
+                            com.atlassian.templaterenderer.*;resolution:="optional",
+                            com.atlassian.sal.*;resolution:="optional",
+                            com.atlassian.activeobjects.*;resolution:="optional",
+                            com.atlassian.security.*;resolution:="optional",
+                            *;version="0";resolution:=optional,
+                            javax.validation*,
+                            org.osgi.framework*,
+                            org.springframework*
                         </Import-Package>
-                        <!-- Ensure plugin is spring powered -->
-                        <Spring-Context>*</Spring-Context>
                     </instructions>
+                    <libArtifacts>
+                        <libArtifact>
+                            <groupId>org.postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                            <version>${postgres.version}</version>
+                        </libArtifact>
+                    </libArtifacts>
+                    <pluginArtifacts>
+                        <pluginArtifact>
+                            <groupId>com.atlassian.labs.plugins</groupId>
+                            <artifactId>quickreload</artifactId>
+                            <version>5.0.2</version>
+                        </pluginArtifact>
+                    </pluginArtifacts>
                 </configuration>
             </plugin>
         </plugins>
@@ -194,35 +299,16 @@
 
     <repositories>
         <repository>
-            <id>central</id>
-            <name>Maven Repository Switchboard</name>
-            <layout>default</layout>
-            <url>https://repo1.maven.org/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>atlassian-public-external</id>
-            <name>Atlassian External Maven</name>
-            <url>https://packages.atlassian.com/mvn/maven-atlassian-external/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>atlassian-public</id>
-            <url>https://packages.atlassian.com/mvn/maven-external/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-            </releases>
+            <id>atlassian</id>
+            <url>https://packages.atlassian.com/maven/repository/public</url>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>atlassian</id>
+            <url>https://packages.atlassian.com/maven/repository/public</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>

@@ -1,5 +1,10 @@
 package ru.custom.atlassian.hibernate.validator.config.resource;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import ru.custom.atlassian.hibernate.validator.config.dto.DemoDto;
+import ru.custom.atlassian.hibernate.validator.config.service.DemoValidationService;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -12,12 +17,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import lombok.AllArgsConstructor;
-import org.springframework.validation.annotation.Validated;
-import ru.custom.atlassian.hibernate.validator.config.dto.DemoDto;
-import ru.custom.atlassian.hibernate.validator.config.service.DemoValidationService;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Validated
 @Path("/validation")
 @Produces({MediaType.APPLICATION_JSON})
@@ -29,7 +30,7 @@ public class DemoValidationResource {
   @Path("/using_query_param")
   public String validateQueryParameter(
       @Valid
-          @Max(value = 10, message = "somePath param cannot be more than 10")
+          @Max(value = 10)
           @QueryParam("numberParam")
           final Integer numberParam) {
     return "Success validation query param " + numberParam;
@@ -39,7 +40,7 @@ public class DemoValidationResource {
   @Path("/using_path_param/{numberParam}")
   public String validatePathParameter(
       @Valid
-          @Min(value = 20, message = "somePath param cannot be less than 20")
+          @Min(value = 20)
           @PathParam("numberParam")
           final Integer numberParam) {
     return "Success validation path param " + numberParam;
@@ -50,7 +51,7 @@ public class DemoValidationResource {
   @Consumes({MediaType.APPLICATION_JSON})
   public String validateJson(
       @Valid
-          @Min(value = 30, message = "numberParam cannot be less than 30")
+          @Min(value = 30)
           @PathParam("someParam")
           final Integer numberParam,
       @Valid @NotNull final DemoDto json) {
@@ -60,7 +61,7 @@ public class DemoValidationResource {
   @GET
   @Path("/call_service_with_validated_param")
   public String callServiceWithValidatedParam(
-      @Valid @NotNull(message = "someNumberParam cannot be null") @QueryParam("someNumberParam")
+      @Valid @NotNull @QueryParam("someNumberParam")
           final Integer someNumberParam) {
     demoValidationService.testMethodParamValidation(someNumberParam);
     return "Success called service with validated param";

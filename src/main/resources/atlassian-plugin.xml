@@ -10,10 +10,12 @@
         <param name="atlassian-data-center-compatible">true</param>
     </plugin-info>
 
-    <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="jira-custom-hibernate-validator"/>
-    
-    <!-- add our web resources -->
+    <!-- added default i18n resource for message in business logic -->
+    <resource type="i18n" name="jira-custom-hibernate-validator" location="/ru/custom/atlassian/hibernate/validator/config/jira-custom-hibernate-validator"/>
+
+    <!-- added default i18n resource for message in hibernate-validation mechanism with custom messages -->
+    <resource type="i18n" name="validation-messages" location="/ru/custom/atlassian/hibernate/validator/config/validation-messages"/>
+
     <web-resource key="jira-custom-hibernate-validator-resources" name="jira-custom-hibernate-validator Web Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
         
